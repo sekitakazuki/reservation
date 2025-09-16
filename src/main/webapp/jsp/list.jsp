@@ -6,9 +6,10 @@
 <meta charset="UTF-8">
 <title>予約一覧</title>
 <link rel="stylesheet" href="style.css">
+<script src="https://kit.fontawesome.com/c187d503f4.js" crossorigin="anonymous"></script>
 </head>
 <body>
-	<div class="container">
+	<div class="main">
 		<h1>予約一覧</h1>
 		<form action="reservation" method="get" class="search-sort-form">
 			<input type="hidden" name="action" value="list">
@@ -64,14 +65,18 @@
 						<td>${reservation.id}</td>
 						<td>${reservation.name}</td>
 						<td>${reservation.reservationTime}</td>
-						<td class="table-actions"><a
-							href="reservation?action=edit&id=${reservation.id}"
-							class="button">編集</a>
-							<form action="reservation" method="post" style="display: inline;">
-								<input type="hidden" name="action" value="delete"> 
-								<input type="hidden" name="id" value="${reservation.id}"> 
-								<input type="submit" value="キャンセル" class="button danger"onclick="returnconfirm('本当にキャンセルしますか？');">
-							</form></td>
+						<c:choose>
+       						 <c:when test="${not empty sessionScope.user and sessionScope.user == reservation.name or sessionScope.user == 'admin'}">
+								<td class="table-actions"><a
+									href="reservation?action=edit&id=${reservation.id}"
+									class="button">編集</a>
+									<form action="reservation" method="post" style="display: inline;">
+										<input type="hidden" name="action" value="delete"> 
+										<input type="hidden" name="id" value="${reservation.id}"> 
+										<input type="submit" value="キャンセル" class="button danger"onclick="returnconfirm('本当にキャンセルしますか？');">
+									</form></td>
+							</c:when>
+						</c:choose>
 					</tr>
 				</c:forEach>
 				<c:if test="${empty reservations}">
@@ -91,8 +96,7 @@
 						<span class="current">${i}</span>
 					</c:when>
 					<c:otherwise>
-						<a
-							href="reservation?action=list&page=${i}&search=${searchTerm}&sortBy=${sortBy}&sortOrder=${sortOrder}">${i}</a>
+						<a href="reservation?action=list&page=${i}&search=${searchTerm}&sortBy=${sortBy}&sortOrder=${sortOrder}">${i}</a>
 					</c:otherwise>
 				</c:choose>
 			</c:forEach>
@@ -101,7 +105,7 @@
 			</c:if>
 		</div>
 		<div class="button-group">
-			<a href="index.jsp" class="button secondary">トップに戻る</a>
+			<a href="index.jsp" class="btn btn-flat"><span>トップに戻る</span></a>
 		</div>
 	</div>
 </body>

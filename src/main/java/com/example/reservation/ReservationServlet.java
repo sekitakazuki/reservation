@@ -34,7 +34,7 @@ public class ReservationServlet extends HttpServlet {
 			int page = 1;
 			int recordsPerPage = 5;
 			
-			if(req.getParameter("page") !=null ) {
+			if(req.getParameter("page") !=null ) {	
 				page = Integer.parseInt(req.getParameter("page"));
 			}
 			List<Reservation> allReservations = reservationDAO.searchAndSortReservations(seatchTerm, sortBy, sortOder);
@@ -44,6 +44,9 @@ public class ReservationServlet extends HttpServlet {
 			List<Reservation> reservations = allReservations.subList(start,end);
 			
 			int noOfPages = (int) Math.ceil(allReservations.size() * 1.0 / recordsPerPage);
+			
+			List<String> registeredUsers = UserDAO.findAllUsernames();
+	        req.setAttribute("registeredUsers", registeredUsers);
 			
 			req.setAttribute("reservations",reservations);
 			req.setAttribute("noOfPages",noOfPages);
